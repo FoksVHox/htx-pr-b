@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /*
@@ -9,11 +10,14 @@ import java.util.Scanner;
     given fil.
  */
 public class Prime {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter prime-number");
         int num = in.nextInt();
+        String ns = in.nextLine();
+
+        System.out.println(num);
+        System.out.println(ns);
 
         boolean flag = false;
         for (int i = 2; i <= num / 2; ++i) {
@@ -47,6 +51,19 @@ public class Prime {
         if(bool == 1){
             System.out.println("What should we call the file?");
             String fileName = in.next();
+
+            // make a file with the name given by the user
+            java.io.File file = new java.io.File(fileName);
+
+            // put content on file
+            java.io.PrintWriter writer = new java.io.PrintWriter(file);
+            for (int i = 2; i <= num; i++) {
+                if (num % i != 0) {
+                    writer.println(i + " is a prime number.");
+                }
+            }
+            writer.close();
+            System.out.println("File saved as "+fileName+"!\n");
         }
     }
 }
