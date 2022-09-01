@@ -78,15 +78,19 @@ public class CharList {
     }
 
     public static void main(String[] args) {
-        //add characters
-        new CharList('a', 37);
-        new CharList('b', 7);
-        new CharList('c', 87);
-        new CharList('d', 114);
-        new CharList('e', 13);
-        new CharList('f', 3);
-        new CharList('g', 22);
-        new CharList('h', 69);
+
+        byte[] bytes = FileReader.ReadFile("C:\\devlist.txt");
+        int[] nrBytes = new int[256];
+
+        assert bytes != null;
+        int len = bytes.length;
+
+        for (int i = 0; i < len; i++) {
+            nrBytes[bytes[i]+128]++;
+        }
+
+
+
         //grow the tree
         CharList.GrowTree();
         //print the tree
