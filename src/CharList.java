@@ -22,11 +22,12 @@ public class CharList {
         // loop through the list until you find the two least common elements
         while(temp != null){
             if(temp.Node.Number < low1.Node.Number || temp.Node.Number < low2.Node.Number){
-                if(low1.Node.Number < low2.Node.Number){
-                    low2 = temp;
+                if(low1.Node.Number > low2.Node.Number){
+                    low1 = temp;
+                    return;
                 }
                 else{
-                    low1 = temp;
+                    low2 = temp;
                 }
             }
             temp = temp.Next;
