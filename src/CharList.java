@@ -1,9 +1,12 @@
 public class CharList {
-    private TreeNode Node;
+    public TreeNode Node;
     private CharList Next;
     private static CharList First;
 
     CharList(char c, long n){
+        if (First != null) {
+            Next = First;
+        }
         First = this;
         Node = new TreeNode();
         this.Node.Character = c;
@@ -38,12 +41,31 @@ public class CharList {
         removeElement(low2);
     }
 
-    public static void removeElement(CharList element){
-        CharList temp = First;
-        while(temp.Next != element){
-            temp = temp.Next;
+    public static void removeElement(CharList element ) {
+        //special case for firstElement = element
+        if (element == First) First = First.Next;
+        //all the rest
+        CharList tempElement = First;
+        while (tempElement.Next != element) {
+            //move down the list
+            tempElement = tempElement.Next;
+            //break if we reached the end
+            if (tempElement == null) return;
         }
-        temp.Next = element.Next;
+        //if we make it here, we must have found the element, and its tempElement.nextElement - Delete it!
+        tempElement.Next = element.Next;
+    }
+
+    public static void removeNextElement(CharList element) {
+        if (element.Next != null) element.Next = element.Next.Next;
+    }
+
+    public static CharList getFirstElement() {
+        return First;
+    }
+
+    public CharList getNextElement() {
+        return Next;
     }
 
     public static void GrowTree(){
@@ -54,35 +76,19 @@ public class CharList {
         First = null;
     }
 
-    public static void main(String[] args)
-    {
-        new CharList('a', 1);
-        new CharList('b', 20);
-        new CharList('c', 30);
-        new CharList('d', 40);
-        new CharList('e', 50);
-        new CharList('f', 69);
-        new CharList('g', 70);
-        new CharList('h', 80);
-        new CharList('i', 90);
-        new CharList('j', 100);
-        new CharList('k', 110);
-        new CharList('l', 120);
-        new CharList('m', 130);
-        new CharList('n', 140);
-        new CharList('o', 150);
-        new CharList('p', 160);
-        new CharList('q', 170);
-        new CharList('r', 180);
-        new CharList('s', 190);
-        new CharList('t', 200);
-        new CharList('u', 210);
-        new CharList('v', 220);
-        new CharList('w', 230);
-        new CharList('x', 240);
-        new CharList('y', 250);
-        new CharList('z', 260);
-
+    public static void main(String[] args) {
+        //add characters
+        new CharList('a', 37);
+        new CharList('b', 7);
+        new CharList('c', 87);
+        new CharList('d', 114);
+        new CharList('e', 13);
+        new CharList('f', 3);
+        new CharList('g', 22);
+        new CharList('h', 69);
+        //grow the tree
         CharList.GrowTree();
+        //print the tree
+        TreeNode.PrintTree();
     }
 }
