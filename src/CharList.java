@@ -4,40 +4,42 @@ public class CharList {
     private static CharList First;
 
     CharList(char c, long n){
-        if (First != null) {
+        if(First == null){
+            First = this;
+        }else {
             Next = First;
+            First = this;
         }
-        First = this;
         Node = new TreeNode();
         this.Node.Character = c;
         this.Node.Number = n;
     }
 
     // function for combing the two least common elements into a new element
-    private static void CombineLeastCommon(){
+    private static void CombineLeastCommon() {
+        //if (firstElement.nextElement == null) return;  //can't combine with only one element
         CharList low1 = First;
         CharList low2 = First.Next;
-        CharList temp = First.Next.Next;
-
-        // loop through the list until you find the two least common elements
-        while(temp != null){
-            if(temp.Node.Number < low1.Node.Number || temp.Node.Number < low2.Node.Number){
-                if(low1.Node.Number > low2.Node.Number){
-                    low1 = temp;
-                    return;
-                }
-                else{
-                    low2 = temp;
+        CharList tempElement = First.Next.Next;
+        //loop through the list
+        while (tempElement != null) {
+            //compare node values
+            if (tempElement.Node.Number < low1.Node.Number || tempElement.Node.Number < low2.Node.Number) {
+                if (low1.Node.Number < low2.Node.Number) {
+                    low2 = tempElement;
+                } else {
+                    low1 = tempElement;
                 }
             }
-            temp = temp.Next;
+            //step down the list
+            tempElement = tempElement.Next;
         }
-        // create a new element with the two least common elements
+        //Combine into a new TreeNode
         TreeNode tempNode = new TreeNode();
         tempNode.Left = low1.Node;
         tempNode.Right = low2.Node;
         tempNode.Number = low1.Node.Number + low2.Node.Number;
-
+        //insert into CharList (more or less)
         low1.Node = tempNode;
         removeElement(low2);
     }
@@ -70,6 +72,7 @@ public class CharList {
     }
 
     public static void GrowTree(){
+        System.out.println("Growing Tree");
         while(First.Next != null){
             CombineLeastCommon();
         }
@@ -79,17 +82,22 @@ public class CharList {
 
     public static void main(String[] args) {
 
-        byte[] bytes = FileReader.ReadFile("C:\\devlist.txt");
+        byte[] bytes = FileReader.ReadFile("C:\\temp\\lort.txt");
+        if(bytes == null) System.exit(0);
         int[] nrBytes = new int[256];
 
-        assert bytes != null;
         int len = bytes.length;
 
-        for (int i = 0; i < len; i++) {
-            nrBytes[bytes[i]+128]++;
+        for (byte aByte : bytes) {
+            nrBytes[aByte + 128]++;
         }
 
-
+        for (int i = 0; i<256; i++){
+            if(nrBytes[i] != 0){
+                new CharList((char)(i-128), nrBytes[i]);
+            }
+        }
+        System.out.println("4");
 
         //grow the tree
         CharList.GrowTree();
